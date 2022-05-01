@@ -28,23 +28,25 @@ const polybiusModule = (function () {
   };
 
   function polybius(input, encode = true) {
+    //Decoding Message
     if (!encode) {
       input = input.split(" ");
       if (input.join("").length % 2 !== 0) {
         return false;
       }
       const numberArray = [];
-      for (let i=0; i<input.length; i++) {
+      for (let i = 0; i < input.length; i++) {
         const number = input[i];
-        for (let j=0; j<number.length; j +=2) {
+        for (let j = 0; j < number.length; j += 2) {
           numberArray.push(number.substring(j, j + 2));
-        } 
+        }
         numberArray.push(" ");
       }
       numberArray.pop();
       const decodeMessage = [];
       for (let pair of numberArray) {
-        if (pair === " ") {
+        //Should maintain spaces throughout.
+                if (pair === " ") {
           decodeMessage.push(pair);
         } else {
           const letter = cipher[pair];
@@ -53,14 +55,20 @@ const polybiusModule = (function () {
       }
       return decodeMessage.join("");
 
+      //Encoding Message
     } else {
       input = input.toLowerCase().split("");
+      //Should ignore capital letters.
       const encodeMessage = [];
       for (let letter of input) {
+        //Both letters, i and j translate to 42.
         if (letter === "i" || letter === "j") {
           encodeMessage.push(42);
         } else {
-          let number = Object.keys(cipher).find((key) => cipher[key] === letter);
+          let number = Object.keys(cipher).find(
+            (key) => cipher[key] === letter
+          );
+          //Should maintain spaces throughout.
           if (!number) {
             number = " ";
           }
